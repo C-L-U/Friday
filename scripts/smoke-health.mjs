@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import { connect } from './cdp.mjs';
+const c = await connect();
+try {
+  assert(await c.evaluate(`__TAURI__.core.invoke('bootstrap').then(s=>s.mock)`), 'Use JARVIS_MOCK=1');
+  await c.evaluate(`document.querySelector('#gear').click()`);
+  await c.until(`!document.querySelector('#settings').hidden`);
+  await c.evaluate(`document.querySelector('#diagnostics').open=true;document.querySelector('#deepgram').value='synthetic-deepgram';document.querySelector('#xai').value='synthetic-xai';document.querySelector('#wake-enabled').checked=false;document.querySelector('#form').requestSubmit()`);
+  await c.until(`!document.querySelector('#save').disabled`);
+  const saved = await c.evaluate(`(async()=>({placeholder:document.querySelector('#deepgram').placeholder,empty:document.querySelector('#deepgram').value==='',status:document.querySelector('#status').textContent,visible:!document.querySelector('#settings').hidden,keys:await __TAURI__.core.invoke('secrets_status')}))()`);
+  assert(saved.empty && saved.visible && saved.placeholder.includes('guardada'));
+  assert.match(saved.status, /guardadas y validadas/);
+  assert.deepEqual(saved.keys, {deepgram:'present',xai:'present'});
+  await c.until(`document.body.classList.contains('speaking')`);
+  await c.until(`document.body.classList.contains('listening')`);
+  await c.evaluate(`__TAURI__.core.invoke('mock_transcript',{text:'hola'})`);
+  await c.until(`document.body.classList.contains('speaking')`);
+  await c.until(`document.body.classList.contains('listening')`);
+  await c.evaluate(`document.querySelector('#test-voice').click()`);
+  await c.until(`document.body.classList.contains('speaking')`);
+  const voice = await c.evaluate(`document.querySelector('#test-status').textContent`);
+  assert.match(voice, /Reproducción iniciada/);
+  await c.until(`document.body.classList.contains('listening')`);
+  await c.evaluate(`__TAURI__.core.invoke('frontend_diagnostic',{stage:'frontend_error',detail:'fixture: PCM output unavailable',turn:null})`);
+  await c.until(`document.body.classList.contains('error')`);
+  assert.match(await c.evaluate(`document.querySelector('#health-last_error').textContent`), /PCM output unavailable/);
+  await c.until(`!document.body.classList.contains('error')`);
+  assert.match(await c.evaluate(`document.querySelector('#health-last_error').textContent`), /PCM output unavailable/);
+  const diagnostic = await c.evaluate(`({audio:document.querySelector('#health-audio_context').textContent,latency:document.querySelector('#latency').textContent,models:document.querySelector('#available-models').options.length})`);
+  assert.match(diagnostic.audio, /running.*desbloqueado/);
+  assert(diagnostic.latency.includes('first_audio_played'));
+  assert(diagnostic.models > 1);
+  console.log('Saved state, direct conversation, Test voice, error ring/retention and latency UI passed:', { saved, voice, ...diagnostic });
+} finally { await c.send('Page.reload'); c.close(); }

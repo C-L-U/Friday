@@ -1,0 +1,45 @@
+[llm]
+base_url = "https://api.x.ai/v1"
+model = "grok-4.7"
+max_tokens = 300
+history_turns = 12
+history_token_budget = 4000
+reasoning_effort = "low"
+
+[stt]
+url = "wss://api.deepgram.com/v1/listen"
+validation_url = "https://api.deepgram.com/v1/projects"
+model = "nova-3"
+language = "es"
+endpointing_ms = 300
+utterance_end_ms = 1000
+idle_close_secs = 10
+keyterms = ["Jarvis", "Claude", "Codex"]
+
+[tts]
+url = "https://api.deepgram.com/v1/speak"
+websocket_url = "wss://api.deepgram.com/v1/speak"
+model = "aura-2-celeste-es"
+speed = 1.0
+encoding = "linear16"
+sample_rate = 24000
+container = "none"
+transport = "http"
+
+[activation]
+require_wake_word = false
+wake_word = "jarvis"
+conversation_window_secs = 20
+barge_in_ms = 200
+vad_threshold = 0.012
+
+[coding]
+default_agent = "claude"
+projects_dir = "~/Jarvis/projects"
+timeout_minutes = 30
+extra_args = []
+
+[ui]
+shortcut_mute = "CommandOrControl+Shift+J"
+input_device = ""
+output_device = ""

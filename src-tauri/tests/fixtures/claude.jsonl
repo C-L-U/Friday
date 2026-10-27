@@ -1,0 +1,6 @@
+{"type":"system","subtype":"init","session_id":"fixture-session"}
+not a json line
+{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Write","input":{"file_path":"demo.txt"}}]}}
+{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Bash","input":{"command":"npm install"}}]}}
+{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Bash","input":{"command":"cargo test"}}]}}
+{"type":"result","subtype":"success","is_error":false,"result":"La demostración de prueba terminó correctamente.","session_id":"fixture-session"}

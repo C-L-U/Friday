@@ -1,0 +1,5 @@
+{"type":"thread.started","thread_id":"fixture-codex-session"}
+{"type":"item.started","item":{"id":"item_1","type":"command_execution","command":"npm install"}}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","exit_code":0}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"La aplicación está lista y las pruebas pasan."}}
+{"type":"turn.completed","usage":{"input_tokens":10,"output_tokens":20}}

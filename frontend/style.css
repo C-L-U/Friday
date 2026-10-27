@@ -1,0 +1,53 @@
+:root { font-family: "Segoe UI Variable", "SF Pro Display", system-ui, sans-serif; color-scheme: dark; --level: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; background: transparent; overflow: hidden; }
+#orb { position: relative; width: 160px; height: 160px; display: grid; place-items: center; user-select: none; cursor: grab; }
+.core { width: 84px; height: 84px; border-radius: 50%; background: radial-gradient(circle at 35% 28%, #e1f5ff 0%, #83c9e6 16%, #335d80 48%, #162431 74%); box-shadow: inset -8px -12px 20px #070f1b, 0 0 24px #84cae42b; animation: breathe 5s ease-in-out infinite; }
+.listening .core { transform: scale(calc(1 + var(--level) * .2)); animation: none; box-shadow: 0 0 calc(24px + var(--level) * 25px) #a0e2ff80; }
+.thinking .core { animation: shimmer 2s linear infinite; }
+.speaking .core { animation: none; transform: scale(calc(1 + var(--level) * .22)); box-shadow: 0 0 calc(24px + var(--level) * 30px) #bdddeea0; }
+.muted .core { filter: grayscale(1); opacity: .45; }
+@keyframes breathe { 50% { opacity: .55; transform: scale(.95); } }
+@keyframes shimmer { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; transform: none !important; } }
+button, input, textarea, select { font: inherit; }
+button, a, summary { cursor: pointer; }
+button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid #b6e3f6; outline-offset: 3px; }
+#gear { position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; padding: 6px; color: #bed0dc; background: #14202b90; border: 0; border-radius: 50%; opacity: 0; transition: opacity .15s; }
+body:hover #gear, #gear:focus-visible, .expanded #gear { opacity: 1; }
+#gear svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.expanded { background: #111820; border: 1px solid #2d3b48; border-radius: 22px; }
+.expanded #orb { width: 100%; height: 108px; }
+.expanded .core { width: 58px; height: 58px; }
+#settings { padding: 0 26px 24px; height: calc(100% - 108px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #425563 transparent; }
+[hidden] { display: none !important; }
+form { display: flex; flex-direction: column; gap: 9px; max-width: 600px; margin: auto; }
+label { font-size: 12px; color: #bdcbd5; margin-top: 7px; }
+input, textarea, select { width: 100%; border: 1px solid #30404f; border-radius: 9px; background: #19232d; color: #e8eff4; padding: 10px 12px; outline: none; font-size: 13px; }
+input:focus, textarea:focus, select:focus { border-color: #83c9e6; }
+textarea { resize: vertical; min-height: 160px; line-height: 1.5; }
+.secret { display: flex; position: relative; }
+.secret input { padding-right: 42px; }
+.eye { position: absolute; right: 6px; top: 3px; bottom: 3px; width: 32px; background: none; border: none; color: #bdcbd5; }
+#restore { align-self: flex-start; color: #8ba6b7; font-size: 11px; text-underline-offset: 3px; }
+details { margin-top: 9px; }
+details summary { font-size: 12px; color: #bdcbd5; padding: 8px 0; }
+details label { display: block; margin: 10px 0 5px; }
+.check { display: flex; gap: 9px; align-items: center; }
+.check input { width: auto; accent-color: #83c9e6; }
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-left: 4px; background: #596976; }
+.dot.good { background: #90c7b6; }.dot.bad { background: #e19898; }
+#status { font-size: 11px; color: #d1b3ad; line-height: 1.5; margin: 0; min-height: 16px; }
+#save { background: #b6d8e8; color: #172630; border: none; border-radius: 9px; padding: 11px; font-size: 13px; font-weight: 600; }
+#save:disabled { opacity: .5; cursor: wait; }
+.attention .core { box-shadow: 0 0 32px #a6d9f080; }
+#health { font-size: 11px; overflow-wrap: anywhere; } #health dt { color: #8ba6b7; margin-top: 8px; } #health dd { margin: 2px 0; }
+#health { font-size: 12px; }
+#health dd { margin: 0 0 8px; overflow-wrap: anywhere; }
+#latency { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; }
+#input-level { width: 100%; }
+.tests { display: flex; gap: 8px; margin-top: 10px; }
+.change { padding: 3px 8px; font-size: 12px; }
+small { display: block; min-height: 1em; }
+body.error #orb { box-shadow: 0 0 0 2px #e87d7d88, 0 0 24px #e87d7d55; border-radius: 50%; }
+body.ignored #orb { filter: sepia(.7); opacity: .65; }

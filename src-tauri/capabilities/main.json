@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main",
+  "description": "Local orb window: events and window controls only.",
+  "windows": ["main"],
+  "permissions": ["core:event:default", "core:window:allow-start-dragging", "core:window:allow-set-size", "core:window:allow-hide", "core:window:allow-show", "core:window:allow-set-focus"]
+}
