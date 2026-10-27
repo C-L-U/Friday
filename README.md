@@ -1,81 +1,539 @@
-# Jarvis
+# ◉ JARVIS
 
-Asistente de voz de escritorio en Rust y Tauri 2. Una esfera flotante, conversación en español, interrupciones y delegación a Claude Code o Codex. HTML, CSS y JavaScript nativo, sin npm ni empaquetador de frontend.
+### Your desktop. Your voice. Your AI.
 
-## Uso
+**An intelligent, voice-first desktop assistant built with Rust and Tauri 2.**
 
-Instala el paquete de tu plataforma y abre Jarvis. La primera vez aparecen los ajustes: introduce una clave de Deepgram y otra de xAI y pulsa **Guardar**. Jarvis valida ambas, las guarda en el llavero del sistema y activa el micrófono. Di «Jarvis, hola». Durante los veinte segundos posteriores a una respuesta puedes continuar sin repetir su nombre.
+Talk naturally. Automate your workflow. Build software with AI agents. All from a minimal, floating interface that stays out of your way.
 
-La esfera se arrastra; el engranaje aparece al pasar el cursor. Escape cierra los ajustes. Doble clic oculta la ventana; el icono de bandeja la vuelve a mostrar. `Ctrl+Shift+J` / `Cmd+Shift+J` silencia el micrófono. En siguientes arranques escucha desde la bandeja, sin saludo. El inicio de sesión automático se habilita en la aplicación instalada, no durante desarrollo ni en modo de prueba.
+**Rust** · **Tauri 2** · **Deepgram** · **xAI / Grok** · **Claude Code** · **OpenAI Codex**
 
-Las claves guardadas nunca se devuelven a JavaScript. Si el llavero no está disponible se usa `credentials.json` con permisos exclusivos del usuario: 0600 en Unix y ACL restringida en Windows. Las entradas de contraseña se vacían al guardar. Si una validación falla, la clave válida se conserva en memoria mientras corriges la otra.
+---
 
-## Desarrollo y compilación
+<p align="center">
 
-Instala Rust estable y los [prerrequisitos oficiales de Tauri](https://v2.tauri.app/start/prerequisites/): Visual Studio Build Tools con C++/Windows SDK en Windows; Xcode Command Line Tools en macOS; WebKitGTK 4.1, AppIndicator y las bibliotecas indicadas en el workflow en Linux. Después:
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
+![Tauri](https://img.shields.io/badge/Tauri_2-24C8DB?style=for-the-badge&logo=tauri&logoColor=white)
+![JavaScript](https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Platforms](https://img.shields.io/badge/Windows_%7C_macOS_%7C_Linux-24292F?style=for-the-badge)
 
-```sh
+</p>
+
+> **"Jarvis, crea una aplicación."**
+>
+> One sentence. An AI-powered development workflow.
+
+Jarvis brings real-time voice interaction, AI reasoning, and autonomous coding agents into a lightweight desktop experience. No browser tabs, no complex dashboards, and no frontend build pipeline.
+
+Designed for natural Spanish conversations, fast interruptions, and seamless delegation to developer tools.
+
+## ✦ Features
+
+| Feature | Description |
+|---|---|
+| 🎙️ **Voice-first interaction** | Natural Spanish conversations with wake-word activation. |
+| ◉ **Floating interface** | A draggable, minimal sphere that lives on your desktop. |
+| ⚡ **Interruptible responses** | Speak while Jarvis is responding to interrupt playback. |
+| 🧠 **AI reasoning** | Conversational intelligence powered by xAI / Grok. |
+| 💻 **Coding agents** | Delegate software development tasks to Claude Code or Codex. |
+| 🔄 **Project continuity** | Resume agent sessions within the same project. |
+| 🔐 **Secure credentials** | Store API keys in the operating system's native keyring when available. |
+| 🛠️ **Live configuration** | Automatically reload valid configuration changes. |
+| 🖥️ **Cross-platform** | Native desktop builds for Windows, macOS, and Linux. |
+| 🧪 **Offline testing** | Test the application without external API keys or services. |
+
+## ◉ The Experience
+
+**Minimal by design. Powerful by voice.**
+
+Jarvis is built around a floating desktop sphere rather than a traditional application window.
+
+- **Drag** the sphere anywhere on your desktop.
+- **Hover** to reveal the settings icon.
+- **Double-click** to hide the window.
+- **Open from the system tray** whenever you need it.
+- **Press Escape** to close the settings panel.
+- **Mute or unmute** the microphone with a global shortcut.
+
+| Platform | Microphone shortcut |
+|---|---|
+| Windows / Linux | `Ctrl + Shift + J` |
+| macOS | `Cmd + Shift + J` |
+
+### Natural conversation
+
+Start by saying:
+
+> **You:** Jarvis, hola.
+>
+> **Jarvis:** [Responds through the configured voice system.]
+>
+> **You:** Ahora ayúdame a crear un proyecto.
+
+After Jarvis responds, you have a **20-second follow-up window** to continue the conversation without repeating the wake word.
+
+On subsequent launches, Jarvis can listen from the system tray without playing an initial greeting.
+
+## 🚀 Getting Started
+
+### 01 — Install Jarvis
+
+Install the package appropriate for your operating system.
+
+| Operating system | Package formats |
+|---|---|
+| Windows | `.exe` (NSIS), `.msi` |
+| macOS | `.app`, `.dmg` |
+| Linux | `.AppImage`, `.deb` |
+
+Packages are generated by the build workflow. They are not automatically published as GitHub Releases.
+
+### 02 — Configure your API keys
+
+On the first launch, Jarvis opens the settings panel.
+
+You'll need:
+
+1. **Deepgram API key** — speech recognition.
+2. **xAI API key** — conversational intelligence.
+
+Obtain credentials from:
+
+- [Deepgram Console](https://console.deepgram.com/)
+- [xAI Console](https://console.x.ai/)
+
+Enter both keys and select **Guardar**.
+
+Jarvis validates the credentials, stores them securely, and activates the microphone.
+
+If one validation fails, the valid credential remains temporarily in memory while you correct the other.
+
+### 03 — Start talking
+
+Say:
+
+```text
+Jarvis, hola.
+```
+
+That's it. Jarvis is ready to assist.
+
+## 🧠 How Jarvis Works
+
+Jarvis combines local audio processing with cloud-based AI services and optional local coding agents.
+
+```mermaid
+flowchart TD
+    A["🎙️ Microphone"] --> B["Local Voice Activity Detection"]
+    B --> C["Deepgram Speech-to-Text"]
+    C --> D{"Wake word / Active conversation?"}
+    D -->|Yes| E["Jarvis Orchestrator"]
+    D -->|No| B
+    E --> F["xAI / Grok"]
+    E --> G["Coding Agent Manager"]
+    G --> H["Claude Code"]
+    G --> I["OpenAI Codex"]
+    F --> J["Text-to-Speech"]
+    J --> K["🔊 Audio Output"]
+    H --> L["Local Projects"]
+    I --> L
+```
+
+### Technology stack
+
+| Layer | Technology |
+|---|---|
+| Desktop framework | Tauri 2 |
+| Core runtime | Rust |
+| User interface | HTML, CSS, vanilla JavaScript |
+| Speech recognition | Deepgram |
+| Conversational AI | xAI / Grok |
+| Coding automation | Claude Code / OpenAI Codex |
+| Configuration | TOML |
+| Credential storage | Native keyring / restricted fallback |
+| Audio output | Web Audio |
+
+**No React. No frontend bundler. No npm runtime dependency.**
+
+Node.js is only used for development tests.
+
+## 💻 AI Coding Agents
+
+### From an idea to a working project
+
+Jarvis can delegate programming tasks to locally installed AI coding agents.
+
+Try commands like:
+
+```text
+"Jarvis, crea una aplicación de tareas en Rust."
+
+"Jarvis, cómo va el proyecto."
+
+"Jarvis, continúa con la implementación."
+
+"Jarvis, cancela eso."
+```
+
+The agent runs in the background while Jarvis manages the conversation.
+
+### Supported agents
+
+| Agent | Integration | Permission policy |
+|---|---|---|
+| Claude Code | Local CLI | `acceptEdits` |
+| OpenAI Codex | Local CLI | `workspace-write` |
+
+Both tools must be **installed and authenticated independently**.
+
+The Deepgram and xAI API keys do not authenticate either coding agent.
+
+If an agent is unavailable, Jarvis explains the problem through voice.
+
+### Project workspace
+
+Projects are organized under:
+
+```text
+~/Jarvis/
+└── projects/
+    ├── my-first-app/
+    ├── rust-backend/
+    └── desktop-tool/
+```
+
+Jarvis normalizes project names, canonicalizes working paths, and verifies that the resulting working directory remains inside the project root.
+
+**Important:** This is a working-directory restriction, not an operating-system sandbox. External agents may still have access to resources permitted by their own execution environment.
+
+### Agent execution lifecycle
+
+```mermaid
+flowchart TD
+    A["Voice Request"] --> B["Project Resolution"]
+    B --> C["Launch Agent CLI"]
+    C --> D["Stream JSONL Events"]
+    D --> E["Progress Notifications"]
+    E --> F{"Task Finished?"}
+    F -->|No| D
+    F -->|Yes| G["Grok Final Summary"]
+    G --> H["Voice Response"]
+    H --> I["Offer to Open Project"]
+```
+
+Jarvis supports:
+
+- Session continuity per project during the current application run.
+- Background execution without blocking the interface.
+- Streaming progress through JSONL events.
+- Process-tree cancellation.
+- A default execution timeout of **30 minutes**.
+- Progress notifications no more frequently than every **12 seconds**.
+- Voice notifications that wait until you finish speaking.
+- A final summary generated with a single Grok request.
+- Voice confirmation before opening the resulting project folder.
+
+Tasks are passed through standard input without interpolating the user's instructions into a shell command.
+
+### Agent permissions
+
+Additional CLI arguments can be configured through `coding.extra_args`.
+
+Arguments that change the working directory or communication protocol are rejected.
+
+For Claude Code, `--dangerously-skip-permissions` is strictly opt-in. It does not turn the project directory into a system sandbox.
+
+Jarvis does not automatically grant permissions outside the selected agent's policy.
+
+## 🛠️ Development
+
+### Prerequisites
+
+Install the latest stable Rust toolchain and the official [Tauri 2 prerequisites](https://v2.tauri.app/start/prerequisites/).
+
+| Platform | Requirements |
+|---|---|
+| Windows | Visual Studio Build Tools, C++ workload, Windows SDK |
+| macOS | Xcode Command Line Tools |
+| Linux | WebKitGTK 4.1, AppIndicator, and the libraries specified in the build workflow |
+
+### Run locally
+
+Install the Tauri CLI:
+
+```bash
 cargo install tauri-cli --locked --version '^2'
+```
+
+Start the development environment:
+
+```bash
 cargo tauri dev
 ```
 
-Para generar instaladores en cada sistema nativo:
+### Build for production
 
-```sh
+```bash
 cargo tauri build
 ```
 
-Los paquetes quedan en `target/release/bundle/`: Windows NSIS `.exe` y `.msi`; macOS `.app` y `.dmg`; Linux `.AppImage` y `.deb`. Windows incorpora el instalador de WebView2; Linux empaqueta las bibliotecas multimedia en AppImage. El workflow `.github/workflows/build.yml` compila Windows, Linux y macOS Apple Silicon/Intel y conserva artefactos. No publica releases automáticamente. Los certificados de firma y la notarización de distribución requieren las credenciales del editor; los paquetes locales no están firmados.
+Build outputs are generated in:
 
-En el equipo de desarrollo de esta entrega se usó MinGW porque no hay linker/SDK de Visual Studio. Su instalación en una ruta con espacios falla internamente. La comprobación local se ejecutó así, sin modificar las rutas del proyecto:
+```text
+target/release/bundle/
+```
+
+The GitHub Actions workflow at `.github/workflows/build.yml` builds for Windows, Linux, macOS Apple Silicon, and macOS Intel, and retains the generated artifacts.
+
+Windows packages include WebView2 installation support. The Linux AppImage bundles the required multimedia libraries.
+
+**Distribution note:** Local builds are unsigned. Production signing and Apple notarization require the publisher's certificates and credentials. The workflow does not automatically publish releases.
+
+<details>
+<summary><strong>Windows: MinGW development workaround</strong></summary>
+
+On the development machine used for this project, Visual Studio's linker and SDK were unavailable, so MinGW was used instead.
+
+A MinGW installation path containing spaces caused internal failures.
+
+The following environment variables were used locally:
 
 ```powershell
 $env:PATH = 'C:/mingw64/bin;' + $env:PATH
 $env:CARGO_TARGET_DIR = 'C:/tmp/jarvis-target'
+
 cargo tauri dev
 cargo tauri build
 ```
 
-Estas dos variables son un arreglo para ese equipo, no un requisito del repositorio ni del instalador.
+This workaround is specific to that development environment. It is not a general requirement for Jarvis or its installers.
 
-## Configuración y datos
+</details>
 
-`config.toml` y `system_prompt.txt` se crean en el directorio de configuración de `com.jarvis.voice` de la plataforma. Los valores base están en `src-tauri/defaults/`. Las modificaciones válidas se recargan automáticamente; el prompt se guarda 600 ms después de editarlo y se usa en el siguiente turno. **Restaurar predeterminado** recupera el texto español original. Un TOML inválido conserva la última configuración válida.
+## ⚙️ Configuration
 
-La configuración incluye modelos, URLs, velocidad, idioma, activación, historial, directorio de proyectos y atajo. `tts.transport` admite `http` y `websocket`. La conversación, PCM, historial y sesiones de agentes se mantienen en memoria; los propios agentes externos pueden conservar sus sesiones y proyectos según su configuración. Jarvis no graba audio ni conversaciones en disco. El VAD decide cuándo conectar Deepgram: el nombre de activación se reconoce sobre la transcripción, por lo que el audio detectado como voz se envía a Deepgram aunque todavía no hayas dicho «Jarvis».
+Jarvis creates two editable configuration files in the platform-specific configuration directory associated with `com.jarvis.voice`.
 
-## Agentes de programación
+```text
+config.toml
+system_prompt.txt
+```
 
-Di «Jarvis, crea una app demo de…», «cómo va el proyecto» o «cancela eso». El agente trabaja en `~/Jarvis/projects/<nombre>`; los nombres se normalizan, la ruta se canonicaliza y se verifica que quede dentro de la raíz. Esto limita la carpeta de trabajo, **no constituye un sandbox del sistema operativo**. Codex usa además `workspace-write`; Claude conserva su política de permisos `acceptEdits`.
+Default values are maintained in:
 
-Claude Code o Codex deben estar instalados y autenticados en el equipo para esta función. Las dos claves de voz no autentican sus CLI. Si faltan, Jarvis lo explica por voz. Descubre binarios nativos y shims de npm sin interpolar la tarea en un shell. Envía la tarea por stdin, interpreta JSONL y conserva el identificador de sesión por proyecto durante la ejecución de Jarvis. Las siguientes solicitudes al mismo proyecto reanudan la sesión. El agente funciona en segundo plano, con cancelación del árbol de procesos y un límite predeterminado de treinta minutos. Los avisos usan plantillas, esperan a que dejes de hablar y se limitan a uno cada doce segundos; el resumen final usa una sola llamada a Grok. Puedes aceptar por voz la oferta de abrir la carpeta.
+```text
+src-tauri/defaults/
+```
 
-`coding.extra_args` permite opciones de la CLI; se rechazan las que cambian carpeta o protocolo. `--dangerously-skip-permissions` es exclusivamente opt-in y sigue ejecutándose dentro de la carpeta del proyecto. Las tareas externas pueden requerir permisos adicionales: no se autorizan operaciones fuera de la política del agente de forma automática.
+### Configuration capabilities
 
-## Verificación
+| Setting | Purpose |
+|---|---|
+| Models | Select configured AI models |
+| URLs | Configure service endpoints |
+| Voice speed | Adjust speech playback speed |
+| Language | Configure language behavior |
+| Activation | Configure wake-word behavior |
+| History | Control conversation history settings |
+| Project directory | Set the coding workspace root |
+| Keyboard shortcut | Configure microphone activation behavior |
+| `tts.transport` | Choose `http` or `websocket` |
 
-```sh
+Valid changes are reloaded automatically.
+
+An invalid TOML file does not replace the last valid configuration.
+
+### Custom system prompt
+
+Edit `system_prompt.txt` to customize Jarvis's behavior.
+
+Prompt changes are saved after a **600 ms debounce** and take effect on the next conversation turn.
+
+The **Restaurar predeterminado** action restores the original Spanish system prompt.
+
+## 🔐 Security & Privacy
+
+Security is treated as part of the architecture, not merely an interface feature.
+
+### Credential protection
+
+Jarvis uses the operating system's native credential store when available.
+
+If native keyring access is unavailable, it falls back to `credentials.json` with restricted user-only access:
+
+| Platform | Protection |
+|---|---|
+| Unix | File permissions `0600` |
+| Windows | Restricted user ACL |
+
+Stored API keys are never returned to the JavaScript frontend.
+
+Password input fields are cleared after saving.
+
+### Audio and data handling
+
+Jarvis keeps the following application data in memory:
+
+- Conversation state and history.
+- PCM audio buffers.
+- Active coding-agent session identifiers.
+
+Jarvis does not intentionally persist audio recordings or conversation transcripts to disk.
+
+External coding agents may independently persist their own sessions, logs, or project files according to their configurations.
+
+### Important privacy distinction
+
+Local voice activity detection determines when to connect to Deepgram.
+
+However, wake-word detection operates on transcribed speech. This means audio classified locally as speech can be sent to Deepgram **before** Jarvis has confirmed that you said its name.
+
+Jarvis is therefore not a fully offline voice assistant.
+
+## 🧪 Testing & Validation
+
+Jarvis includes automated tests for its Rust core, audio behavior, network clients, and desktop integration.
+
+### Rust checks
+
+```bash
 cargo fmt --all -- --check
 cargo check
 cargo clippy -- -D warnings
 cargo test
+```
+
+### Audio tests
+
+```bash
 node scripts/test-audio.mjs
 node scripts/test-playback.mjs
 ```
 
-Para comprobar explícitamente el llavero nativo sin tocar las credenciales de Jarvis: `cargo run --example keyring_probe`. Crea una entrada sintética única, la lee y la elimina.
+Production clients are tested against local HTTP and WebSocket servers.
 
-Las pruebas de Rust también ejercitan los clientes de producción contra servidores HTTP/WebSocket locales: recepción incremental antes del fin de la respuesta, parámetros opcionales, llamadas a herramientas incompletas, alineación PCM y cierre de STT. No requieren claves ni contactan a los proveedores.
+The test suite covers incremental responses, optional parameters, incomplete tool calls, PCM alignment, and speech-recognition shutdown behavior.
 
-Node sólo se usa para pruebas, nunca para construir o ejecutar Jarvis. El modo offline selecciona implementaciones de los traits STT/LLM/TTS:
+These tests do not require API keys or contact external providers.
+
+### Native keyring verification
+
+```bash
+cargo run --example keyring_probe
+```
+
+This probe creates a unique synthetic credential, reads it, and removes it without modifying Jarvis's actual credentials.
+
+## 🧩 Offline Mock Mode
+
+Develop and test Jarvis without cloud credentials or a physical microphone.
+
+**Windows PowerShell**
 
 ```powershell
 $env:JARVIS_MOCK = '1'
 cargo tauri dev
 ```
 
-En macOS/Linux: `JARVIS_MOCK=1 cargo tauri dev`. Usa configuración separada en `mock/`, no consulta ni modifica el llavero y no requiere micrófono. Su TTS emite un tono sintético; no imita una validación de los proveedores. El subproceso de prueba escribe `demo.txt` y emite fixtures JSONL, pasando por el mismo gestor de procesos que las CLI reales.
+**macOS / Linux**
 
-Para la prueba integral en Windows, inicia con `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9222` y `JARVIS_MOCK=1`; ejecuta `node scripts/smoke-webview.mjs`. Comprueba audio, ajustes, prompt, cancelación, historial, herramientas y proceso real de prueba. `node scripts/smoke-first-run.mjs --microphone` comprueba el primer arranque sin modo mock ni claves guardadas y opcionalmente cincuenta frames del micrófono real, sin enviar audio a los proveedores. No habilites el puerto de depuración en distribución normal.
+```bash
+JARVIS_MOCK=1 cargo tauri dev
+```
 
-`debug_latency` devuelve los últimos veinte turnos. Cada turno produce una línea `turn_latency` con sus marcas. Al recibir el endpoint de Deepgram, `speech_end` toma la hora del último frame que el VAD local clasificó como voz: `final_transcript` incluye así la espera de endpointing y transporte. Es una estimación por frames de 20 ms, sensible al ruido; para medir el final acústico exacto hace falta loopback. `first_audio_played` es la hora programada en Web Audio más su latencia de salida informada, no una medición física. El filtro predeterminado de interrupción exige 200 ms de voz sostenida; no puede garantizar detenerse a los 150 ms desde el comienzo de esa misma voz. Los detalles y límites de las pruebas están en [NOTES.md](NOTES.md).
+Mock mode substitutes offline implementations of the STT, LLM, and TTS traits.
+
+It uses a separate `mock/` configuration directory and never reads or modifies the native keyring.
+
+Its synthetic TTS produces a test tone rather than realistic speech.
+
+The test agent writes `demo.txt` and emits JSONL fixtures through the same process manager used by real coding agents.
+
+Mock mode is intended for development and integration testing, not for validating live provider credentials.
+
+### Windows end-to-end smoke tests
+
+Start Jarvis with:
+
+```powershell
+$env:JARVIS_MOCK = '1'
+$env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS = '--remote-debugging-port=9222'
+
+cargo tauri dev
+```
+
+Then run:
+
+```bash
+node scripts/smoke-webview.mjs
+```
+
+This checks audio, settings, prompt editing, cancellation, history, tools, and real test-subprocess execution.
+
+For first-run verification:
+
+```bash
+node scripts/smoke-first-run.mjs --microphone
+```
+
+The first-run test operates without mock mode or saved API credentials. It can optionally inspect 50 frames from a real microphone without sending audio to external providers.
+
+**Never enable the WebView remote-debugging port in a normal production distribution.**
+
+## ⚡ Latency & Diagnostics
+
+Jarvis exposes diagnostic timing information through:
+
+```text
+debug_latency
+```
+
+The command returns the most recent **20 conversation turns**.
+
+Each turn emits a structured `turn_latency` log entry.
+
+### Timing considerations
+
+| Metric | Interpretation |
+|---|---|
+| `speech_end` | Timestamp of the last frame classified as speech by local VAD |
+| `final_transcript` | Includes endpointing and transport wait time |
+| `first_audio_played` | Scheduled Web Audio playback time plus reported output latency |
+
+The VAD uses 20 ms frames, making speech-end estimates sensitive to environmental noise.
+
+Accurate physical acoustic-end measurements require loopback instrumentation.
+
+The default interruption filter requires **200 ms of sustained speech**. Consequently, it cannot guarantee stopping playback within 150 ms of the beginning of that same speech.
+
+For detailed validation methodology and known limitations, see [NOTES.md](NOTES.md).
+
+---
+
+## ✦ Design Philosophy
+
+**Voice should feel like an interface, not a command line.**
+
+Jarvis is built around a few principles:
+
+**Minimal interaction.** A floating sphere should be enough to access a powerful assistant.
+
+**Native performance.** Rust and Tauri provide the foundation without requiring a heavyweight frontend framework.
+
+**Developer-oriented intelligence.** AI should be able to assist with building software, not only answer questions.
+
+**User control.** Credentials, project locations, permissions, and agent execution remain configurable.
+
+**Transparent limitations.** Cloud processing, agent permissions, and audio timing behavior should be documented clearly.
+
+---
+
+<p align="center">
+
+### ◉ JARVIS
+
+**Speak. Think. Build.**
+
+*An intelligent desktop companion, powered by Rust.*
+
+</p>
